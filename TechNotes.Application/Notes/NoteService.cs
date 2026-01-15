@@ -5,28 +5,13 @@ namespace TechNotes.Application.Notes;
 
 public class NoteService : INoteService
 {
-    public List<Note> GetAllNotes()
+    private readonly INoteRepository _noteRepository;
+    public NoteService(INoteRepository noteRepository)
     {
-        return new List<Note>
-        {
-            new()
-            {
-                Id=1,
-                Title="Primera Nota",
-                Content="Contenido de nuestra primera nota",
-                IsPublished=true,
-                PublishedAt=DateTime.UtcNow,
-                CreatedAt= DateTime.UtcNow
-            },
-            new()
-            {
-                Id=2,
-                Title="Segunda Nota",
-                Content="Contenido de nuestra Segunda nota",
-                IsPublished=false,
-                PublishedAt=null,
-                CreatedAt= DateTime.UtcNow
-            }
-        };
+        _noteRepository = noteRepository;
+    }
+    public async Task<List<Note>> GetAllNotesAsync()
+    {
+        return await _noteRepository.GetAllAsync();
     }
 }
