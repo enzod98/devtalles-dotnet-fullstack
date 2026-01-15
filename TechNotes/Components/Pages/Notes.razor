@@ -1,12 +1,12 @@
 ﻿
 @page "/notes"
+@using TechNotes.Application.Notes.GetNotes
 @attribute [StreamRendering]
-@inject INoteService NoteService;
-@using TechNotes.Application.Notes
-@using TechNotes.Domain.Notes
+@* @inject INoteService NoteService; *@
+@inject ISender Sender;
 
 <PageTitle>Notas</PageTitle>
-<h3>Notes</h3>
+<h3>Notas</h3>
 
 @if(notes.Count == 0)
 {
@@ -28,7 +28,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         await Task.Delay(1000);
-        var result = await NoteService.GetAllNotesAsync();
+        var result = await Sender.Send(new GetNotesQuery());
         if(result is not null)
         {
             notes = result.ToList();
