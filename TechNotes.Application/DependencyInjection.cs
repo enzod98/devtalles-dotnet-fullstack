@@ -1,6 +1,4 @@
-using System;
 using Microsoft.Extensions.DependencyInjection;
-using TechNotes.Application.Notes;
 
 namespace TechNotes.Application;
 
@@ -8,7 +6,11 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddAplication(this IServiceCollection services)
     {
-        services.AddScoped<INoteService, NoteService>();
+        services.AddMediatR(conf =>
+        {
+           conf.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly);
+        });
+        
         return services;
     }
 }

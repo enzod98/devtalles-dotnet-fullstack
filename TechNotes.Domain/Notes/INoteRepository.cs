@@ -5,4 +5,8 @@ namespace TechNotes.Domain.Notes;
 public interface INoteRepository
 {
     Task<List<Note>> GetAllAsync();
+    Task<Note> CreateNoteAsync(Note note);
+    Task<Note?> GetNoteByIdAsync(int id);
+    Task<Note?> UpdateNoteAsync(Note note);
+
 }

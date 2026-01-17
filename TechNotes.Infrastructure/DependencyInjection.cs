@@ -18,7 +18,9 @@ public static class DependencyInjection
                 b => b.MigrationsAssembly("TechNotes.Infrastructure")
             );
         });
+
         services.AddScoped<INoteRepository, NoteRepository>();
+
         return services;
     }
 }
