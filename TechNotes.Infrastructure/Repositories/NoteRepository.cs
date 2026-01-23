@@ -47,4 +47,15 @@ public class NoteRepository : INoteRepository
         await _context.SaveChangesAsync();
         return noteToUpdate;
     }
+
+    public async Task<bool> DeleteNoteAsync(int id)
+    {
+        var entity = await GetNoteByIdAsync(id);
+        if(entity is null)
+            return false;
+
+        _context.Notes.Remove(entity);
+        await _context.SaveChangesAsync();
+        return true;
+    }
 }
