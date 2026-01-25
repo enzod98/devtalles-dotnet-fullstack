@@ -11,9 +11,13 @@
 
 <a href="/note-editor" class="btn btn-primary">Crear Nota</a>
 
-@if(notes.Count == 0)
+@if(notes == null)
 {
     <p>Cargando las notas...</p>
+}
+else if(notes.Count == 0)
+{
+    <p>No existen notas</p>
 }
 else
 {
@@ -27,7 +31,7 @@ else
 }
 
 @code {
-    private List<NoteResponse> notes = new List<NoteResponse>();
+    private List<NoteResponse>? notes = new List<NoteResponse>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -35,8 +39,9 @@ else
         var result = await Sender.Send(new GetNotesQuery());
         if(result is not null)
         {
-            notes = result.ToList();
+            notes = result.IsSuccessful ? result.Value : new List<NoteResponse>();
         }
+        
 
     }
     private NoteModel Note { get; set; } = new NoteModel();

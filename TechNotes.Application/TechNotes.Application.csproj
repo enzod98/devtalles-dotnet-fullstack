@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Abstractions\" />
+    <Folder Include="Abstractions\RequestHandling\" />
     <Folder Include="Notes\" />
     <Folder Include="Notes\CreateNote\" />
     <Folder Include="Notes\DeleteNote\" />
