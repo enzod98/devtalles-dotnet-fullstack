@@ -1,12 +1,16 @@
+using TechNotes.Domain.User;
+
 namespace TechNotes.Application.Notes.GetNoteById;
 
 public class GetNoteByIdQueryHandler : IQueryHandler<GetNoteByIdQuery, NoteResponse?>
 {
     private readonly INoteRepository _noteRepository;
+    private readonly IUserRepository _userRepository;
 
-    public GetNoteByIdQueryHandler(INoteRepository noteRepository)
+    public GetNoteByIdQueryHandler(INoteRepository noteRepository, IUserRepository userRepository)
     {
         _noteRepository = noteRepository;
+        _userRepository = userRepository;
     }
 
     public async Task<Result<NoteResponse?>> Handle(
@@ -15,8 +19,22 @@ public class GetNoteByIdQueryHandler : IQueryHandler<GetNoteByIdQuery, NoteRespo
     )
     {
         var note = await _noteRepository.GetNoteByIdAsync(request.Id);
-        return note == null 
-                    ? Result.Fail<NoteResponse?>("Nota no encontrada")
-                    : note.Adapt<NoteResponse>();
+
+        if(note is null)
+            return Result.Fail<NoteResponse?>("Nota no encontrada");
+    
+        var noteResponse = note.Adapt<NoteResponse>();
+        
+        if(note.UserId is not null)
+        {
+            var noteAuthor = await _userRepository.GetUserByIdAsync(note.UserId);
+            noteResponse.UserName = noteAuthor?.UserName ?? "Desconocido"; 
+        }
+        else
+        {
+            noteResponse.UserName = "Desconocido"; 
+        }
+
+        return noteResponse;
     }
 }
