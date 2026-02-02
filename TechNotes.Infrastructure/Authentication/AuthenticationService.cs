@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Razor.TagHelpers;
 using TechNotes.Application.Authentication;
 
 namespace TechNotes.Infrastructure.Authentication;
@@ -29,6 +30,9 @@ public class AuthenticationService : IAuthenticationService
         };
 
         var result = await _userManager.CreateAsync(user, password);
+
+        if(result.Succeeded) 
+            await _userManager.AddToRoleAsync(user, "Reader");
 
         return new RegisterUserResponse
         {
